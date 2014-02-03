@@ -1,5 +1,7 @@
-var db, User, Post, Passport, City, Street, Building;
+var db, User, Post, Passport, City, Street, Building, Asset;
 var nbSchemaRequests = 0;
+
+var createdUsers = [];
 
 describe('include', function (){
 
@@ -21,8 +23,8 @@ describe('include', function (){
             expect(owner.id).to.equal(p.ownerId);
           }
         });
-      }).catch(function(e){
-        expect(function(){
+      }).catch(function (e){
+        expect(function (){
           throw new Error(e);
         }).to.not.throwError();
       }).done(done);
@@ -43,6 +45,26 @@ describe('include', function (){
         throw new Error('Should not fail');
       }).to.not.throwError();
     }).done(done);
+  });
+
+  it('should fetch hasAndBelongsToMany relation', function (done){
+    User.all({include: ['assets']}).then(function (users){
+      expect(users).to.be.ok();
+      expect(users.length).to.be.ok();
+      users.forEach(function (user){
+        expect(user.__cachedRelations).to.have.property('assets');
+        if (user.id === createdUsers[0].id) {
+          expect(user.__cachedRelations.assets).to.have.length(3);
+        }
+        if (user.id === createdUsers[1].id) {
+          expect(user.__cachedRelations.assets).to.have.length(1);
+        }
+        user.__cachedRelations.assets.forEach(function (a){
+          expect(a.url.indexOf('http://placekitten.com')).to.be(0);
+        });
+      });
+      done();
+    });
   });
 
   it('should fetch Passport - Owner - Posts', function (done){
@@ -121,17 +143,16 @@ describe('include', function (){
     }).done(done);
   });
 
-  it('should fail on invalid includes', function(done){
-    User.all({include: 'dontexist'}).then(function(){
-      expect(function(){
+  it('should fail on invalid includes', function (done){
+    User.all({include: 'dontexist'}).then(function (){
+      expect(function (){
         throw new Error('Should not succeed');
       }).to.not.throwException();
-    }).catch(function(e){
+    }).catch(function (e){
       expect(e).to.be.an(Error);
       expect(e.message).to.equal('Relation "dontexist" is not defined for User model');
     }).done(done);
   });
-
 });
 
 function setup(done){
@@ -140,8 +161,9 @@ function setup(done){
   Street = db.define('Street');
   Building = db.define('Building');
   User = db.define('User', {
-    name: String,
-    age : Number
+    name     : String,
+    age      : Number,
+    hasAssets: {type: Boolean, default: false}
   });
   Passport = db.define('Passport', {
     number: String
@@ -149,24 +171,28 @@ function setup(done){
   Post = db.define('Post', {
     title: String
   });
+  Asset = db.define('Asset', {
+    url: String
+  });
 
   Passport.belongsTo('owner', {model: User});
   User.hasMany('passports', {foreignKey: 'ownerId'});
   User.hasMany('posts', {foreignKey: 'userId'});
   Post.belongsTo('author', {model: User, foreignKey: 'userId'});
+  User.hasAndBelongsToMany('assets');
 
   db.automigrate().done(function (){
-    var createdUsers = [];
     var createdPassports = [];
     var createdPosts = [];
+    var createdAssets = [];
     createUsers();
 
     function createUsers(){
       clearAndCreate(
         User,
         [
-          {name: 'User A', age: 21},
-          {name: 'User B', age: 22},
+          {name: 'User A', age: 21, hasAssets: true},
+          {name: 'User B', age: 22, hasAssets: true},
           {name: 'User C', age: 23},
           {name: 'User D', age: 24},
           {name: 'User E', age: 25}
@@ -205,6 +231,28 @@ function setup(done){
         ],
         function (items){
           createdPosts = items;
+          createAssets();
+        }
+      );
+    }
+
+    function createAssets(){
+      clearAndCreateScoped(
+        'assets',
+        [
+          {url: 'http://placekitten.com/200/200'},
+          {url: 'http://placekitten.com/300/300'},
+          {url: 'http://placekitten.com/400/400'},
+          {url: 'http://placekitten.com/500/500'}
+        ],
+        [
+          createdUsers[0],
+          createdUsers[0],
+          createdUsers[0],
+          createdUsers[1]
+        ],
+        function (items){
+          createdAssets = items;
           done();
         }
       );
@@ -234,5 +282,46 @@ function clearAndCreate(model, data, callback){
     }, nextItem);
 
     itemIndex++;
+  }
+}
+
+function clearAndCreateScoped(modelName, data, scope, callback){
+  var createdItems = [];
+
+  var clearedItemIndex = 0;
+  if (scope && scope.length) {
+
+    scope.forEach(function (instance){
+      instance[modelName].destroyAll().then(function (){
+        clearedItemIndex++;
+        if (clearedItemIndex >= scope.length) {
+          createItems();
+        }
+      });
+    });
+
+  } else {
+
+    callback(createdItems);
+  }
+
+  var itemIndex = 0;
+
+  function nextItem(err, lastItem){
+    itemIndex++;
+
+    if (lastItem !== null) {
+      createdItems.push(lastItem);
+    }
+    if (itemIndex >= data.length) {
+      callback(createdItems);
+      return;
+    }
+  }
+
+  function createItems(){
+    scope.forEach(function (instance, instanceIndex){
+      instance[modelName].create(data[instanceIndex], nextItem);
+    });
   }
 }
