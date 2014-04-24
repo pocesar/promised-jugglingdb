@@ -26,22 +26,22 @@ describe('manipulation', function (){
 
     it('should create instance', function (done){
       Person.create({name: 'Anatoliy'})
-      .bind({})
-      .then(function (p){
-        this.p = p;
-        expect(p.name).to.equal('Anatoliy');
-        expect(p).to.be.ok();
-        return Person.find(p.id);
-      })
-      .then(function (person){
-        expect(person.id).to.equal(this.p.id);
-        expect(person.name).to.equal('Anatoliy');
-      })
-      .done(done);
+        .bind({})
+        .then(function (p){
+          this.p = p;
+          expect(p.name).to.equal('Anatoliy');
+          expect(p).to.be.ok();
+          return Person.find(p.id);
+        })
+        .then(function (person){
+          expect(person.id).to.equal(this.p.id);
+          expect(person.name).to.equal('Anatoliy');
+        })
+        .done(done);
     });
 
     it('should return instance of object', function (done){
-      Person.create().then(function(p){
+      Person.create().then(function (p){
         expect(p).to.be.a(Person);
         expect(p.id).to.be.ok();
       }).done(done);
@@ -61,19 +61,19 @@ describe('manipulation', function (){
 
     it('should create instance with blank data', function (done){
       Person
-      .create()
-      .bind({})
-      .then(function (p){
-        this.p = p;
-        expect(p).to.be.ok();
-        expect(p.name).to.not.be.ok();
-        return Person.find(p.id);
-      })
-      .then(function (person){
-        expect(person.id).to.equal(this.p.id);
-        expect(person.name).to.not.be.ok();
-      })
-      .done(done);
+        .create()
+        .bind({})
+        .then(function (p){
+          this.p = p;
+          expect(p).to.be.ok();
+          expect(p.name).to.not.be.ok();
+          return Person.find(p.id);
+        })
+        .then(function (person){
+          expect(person.id).to.equal(this.p.id);
+          expect(person.name).to.not.be.ok();
+        })
+        .done(done);
     });
 
     it('should work when called with no data and callback', function (done){
@@ -94,7 +94,7 @@ describe('manipulation', function (){
         {name: 'Boltay'},
         {}
       ];
-      Person.create(batch).then(function(ps){
+      Person.create(batch).then(function (ps){
         expect(ps).to.be.ok();
         expect(ps).to.be.an('array');
         expect(ps).to.have.length(batch.length);
@@ -102,14 +102,14 @@ describe('manipulation', function (){
         Person.validatesPresenceOf('name');
         return Person.create(batch);
       })
-      .catch(function (errors){
-        delete Person._validations;
-        expect(errors).to.be.ok();
-        expect(errors).to.have.length(batch.length);
-        expect(errors[0]).to.not.be.ok();
-        expect(errors[1]).to.not.be.ok();
-        expect(errors[2]).to.be.ok();
-      }).done(done);
+        .catch(function (errors){
+          delete Person._validations;
+          expect(errors).to.be.ok();
+          expect(errors).to.have.length(batch.length);
+          expect(errors[0]).to.not.be.ok();
+          expect(errors[1]).to.not.be.ok();
+          expect(errors[2]).to.be.ok();
+        }).done(done);
     });
   });
 
@@ -124,40 +124,40 @@ describe('manipulation', function (){
 
     it('should save existing object', function (done){
       Person.findOne()
-      .bind({})
-      .then(function (p){
-        this.p = p;
-        p.name = 'Hans';
-        expect(p.propertyChanged('name')).to.be(true);
-        return p.save();
-      }).then(function (){
-        expect(this.p.propertyChanged('name')).to.be(false);
-        return Person.findOne();
-      }).then(function (p){
-        expect(p.name).to.equal('Hans');
-        expect(p.propertyChanged('name')).to.be(false);
-      }).done(done);
+        .bind({})
+        .then(function (p){
+          this.p = p;
+          p.name = 'Hans';
+          expect(p.propertyChanged('name')).to.be(true);
+          return p.save();
+        }).then(function (){
+          expect(this.p.propertyChanged('name')).to.be(false);
+          return Person.findOne();
+        }).then(function (p){
+          expect(p.name).to.equal('Hans');
+          expect(p.propertyChanged('name')).to.be(false);
+        }).done(done);
     });
 
     it('should save invalid object (skipping validation)', function (done){
       Person.findOne()
-      .bind({})
-      .then(function (p){
-        p.isValid = function (){
-          expect(function (){
-            throw new Error('isValid should be skipped');
-          }).to.not.throwError();
-        };
-        p.name = 'Nana';
-        this.p = p;
-        return p.save();
-      }).catch(function (err){
-        expect(err).to.be.ok();
-        expect(this.p.propertyChanged('name')).to.be(true);
-        return this.p.save({validate: false});
-      }).then(function (p){
-        expect(p.propertyChanged('name')).to.be(false);
-      }).done(done);
+        .bind({})
+        .then(function (p){
+          p.isValid = function (){
+            expect(function (){
+              throw new Error('isValid should be skipped');
+            }).to.not.throwError();
+          };
+          p.name = 'Nana';
+          this.p = p;
+          return p.save();
+        }).catch(function (err){
+          expect(err).to.be.ok();
+          expect(this.p.propertyChanged('name')).to.be(true);
+          return this.p.save({validate: false});
+        }).then(function (p){
+          expect(p.propertyChanged('name')).to.be(false);
+        }).done(done);
     });
 
     it('should save invalid new object (skipping validation)', function (done){
@@ -170,24 +170,24 @@ describe('manipulation', function (){
         }).to.not.throwError();
       };
 
-      p.save({ validate: false }).then(function(){
+      p.save({validate: false}).then(function (){
         expect(p.isNewRecord()).to.be(false);
       }).done(done);
     });
 
     it('should save throw error on validation', function (done){
       Person.findOne()
-      .then(function (p){
-        p.isValid = function (){
-          throw new Error('Invalid');
-        };
+        .then(function (p){
+          p.isValid = function (){
+            throw new Error('Invalid');
+          };
 
-        return p.save();
-      })
-      .catch(function (err){
-        expect(err).to.be.an(Error);
-      })
-      .done(done);
+          return p.save();
+        })
+        .catch(function (err){
+          expect(err).to.be.an(Error);
+        })
+        .done(done);
     });
 
     it('should save with custom fields', function (done){
@@ -230,15 +230,15 @@ describe('manipulation', function (){
 
     it('should destroy record', function (done){
       Person.create()
-      .bind({})
-      .then(function (p){
-        this.p = p;
-        return p.destroy();
-      }).then(function (){
-        return Person.exists(this.p.id);
-      }).then(function(exists){
-        expect(exists).to.equal(false);
-      }).done(done);
+        .bind({})
+        .then(function (p){
+          this.p = p;
+          return p.destroy();
+        }).then(function (){
+          return Person.exists(this.p.id);
+        }).then(function (exists){
+          expect(exists).to.equal(false);
+        }).done(done);
     });
 
     it('should destroy all records', function (done){
@@ -247,17 +247,17 @@ describe('manipulation', function (){
       }).then(function (posts){
         expect(posts).to.have.length(0);
         return Person.count();
-      }).then(function(count){
+      }).then(function (count){
         expect(count).to.be(0);
       }).done(done);
     });
 
-    it('should destroy filtered set of records', function(done){
-      for(var i = 10; i > 0; i--) {
+    it('should destroy filtered set of records', function (done){
+      for (var i = 10; i > 0; i--) {
         Person.create({age: i, married: i > 5});
       }
 
-      Person.destroySome({where: {married: true}}).then(function(count){
+      Person.destroySome({where: {married: true}}).then(function (count){
         expect(count).to.be(5);
       }).done(done);
     });
@@ -270,9 +270,9 @@ describe('manipulation', function (){
       for (var i = 0; i < 507; i += 1) {
         ps.push({name: 'Person ' + i});
       }
-      Person.destroyAll().then(function(){
+      Person.destroyAll().then(function (){
         return Person.create(ps);
-      }).done(function(){
+      }).done(function (){
         done();
       });
     });

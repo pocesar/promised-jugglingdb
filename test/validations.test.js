@@ -48,6 +48,51 @@ describe('validations', function (){
     db.disconnect().done(done);
   });
 
+  describe('hooks', function (){
+
+    it('should trigger beforeValidate with data (has validations)', function (done){
+
+      User.validatesPresenceOf('name');
+      User.beforeValidate = function (next, data){
+        should.exist(data)
+        next(new Error('Fail'));
+      };
+
+      var user = new User;
+      user.isValid(function (valid){
+        // when validate hook fails, valid should be false
+        valid.should.equal(false)
+        done()
+      }, {name: 'test'})
+    });
+
+    it('should trigger beforeValidate with data (no validations set)', function (done){
+      User.beforeValidate = function (next, data){
+        should.exist(data)
+        data.name.should.equal('test')
+        next();
+      };
+      var user = new User;
+      user.isValid(function (valid){
+        valid.should.equal(true)
+        done()
+      }, {name: 'test'})
+    });
+
+    it('should allow flow break by pass error to callback', function (done){
+
+      User.beforeValidate = function (next){
+        next(new Error('failed'));
+      };
+      User.create(function (err, model){
+        should.exist(err);
+        should.exist(model);
+        done()
+      })
+    })
+
+  })
+
   describe('commons', function (){
 
     describe('skipping', function (){
@@ -56,14 +101,14 @@ describe('validations', function (){
         User.validatesPresenceOf('pendingPeriod', {if: 'createdByAdmin'});
         var user = new User();
         user.createdByAdmin = true;
-        user.isValid().catch(function(){
+        user.isValid().catch(function (){
           expect(user.errors.pendingPeriod).to.eql(['can\'t be blank']);
           user.pendingPeriod = 1;
           return user.isValid();
-        }).then(function(){
+        }).then(function (){
           done();
-        }, function(){
-          expect(function(){
+        }, function (){
+          expect(function (){
             throw new Error('It should succeed');
           }).to.not.throwException();
         });
@@ -89,19 +134,19 @@ describe('validations', function (){
         User.validatesPresenceOf('name');
 
         User.create({name: 'Valid'})
-        .bind({})
-        .then(function (d){
-          this.d = d;
-          return this.d.updateAttribute('name', null);
-        }).catch(function (e){
-          expect(e).to.be.ok();
-          expect(e).to.be.a(Error);
-          expect(e).to.be.a(ValidationError);
-          return this.d.updateAttribute('name', 'Vasiliy');
-        }).then(function (u){
-          expect(u).to.be.ok();
-          expect(u.name).to.be('Vasiliy');
-        }).done(done);
+          .bind({})
+          .then(function (d){
+            this.d = d;
+            return this.d.updateAttribute('name', null);
+          }).catch(function (e){
+            expect(e).to.be.ok();
+            expect(e).to.be.a(Error);
+            expect(e).to.be.a(ValidationError);
+            return this.d.updateAttribute('name', 'Vasiliy');
+          }).then(function (u){
+            expect(u).to.be.ok();
+            expect(u.name).to.be('Vasiliy');
+          }).done(done);
       });
 
       it('should return error code', function (done){
@@ -128,12 +173,12 @@ describe('validations', function (){
     it('should validate presence', function (done){
       User.validatesPresenceOf('name', 'email');
       var u = new User();
-      u.isValid().catch(function(e){
+      u.isValid().catch(function (e){
         expect(e).to.be.a(ValidationError);
         u.name = 1;
         u.email = 2;
         return u.isValid();
-      }).then(function(u){
+      }).then(function (u){
         expect(u.name).to.be('1');
       }).done(done);
     });
@@ -143,16 +188,16 @@ describe('validations', function (){
 
       var user = new User(getValidAttributes());
 
-      user.isValid().then(function(u){
+      user.isValid().then(function (u){
         expect(u).to.be(user);
         user.createdByScript = false;
         return user.isValid();
-      }).catch(function(e){
+      }).catch(function (e){
         expect(e).to.be.a(ValidationError);
         expect(user.errors.domain).to.eql(['can\'t be blank']);
         user.domain = 'domain';
         return user.isValid();
-      }).done(function(u){
+      }).done(function (u){
         expect(u).to.be(user);
         done();
       });
@@ -171,7 +216,7 @@ describe('validations', function (){
       }).then(function (){
         var u2 = new User({email: 'hey'});
         return u2.isValid();
-      }).catch(function(e){
+      }).catch(function (e){
         expect(e).to.be.a(ValidationError);
         expect(e.codes.email).to.eql(['uniqueness']);
       }).done(done);
@@ -203,7 +248,7 @@ describe('validations', function (){
       }).then(function (user){
         expect(user).to.be(u);
         return u.save();
-      }).done(function(user){
+      }).done(function (user){
         expect(user).to.be(u);
         done();
       });
@@ -269,8 +314,8 @@ describe('validations', function (){
   });
 
   describe('custom', function (){
-    it('should validate using custom validation', function(done){
-      User.validate('countryCode', function(attr, validator, err, next){
+    it('should validate using custom validation', function (done){
+      User.validate('countryCode', function (attr, validator, err, next){
         if (this[attr] === 'RUS') {
           err();
         }
@@ -278,12 +323,12 @@ describe('validations', function (){
       });
       var u = new User(getValidAttributes());
 
-      u.isValid().then(function(){
+      u.isValid().then(function (){
         u.countryCode = 'RUS';
         return u.isValid();
-      }).catch(function(e){
+      }).catch(function (e){
         expect(e.codes.countryCode).to.eql(['custom']);
-      }).done(function(){
+      }).done(function (){
         done();
       });
     });
