@@ -1,4 +1,4 @@
-[![Stories in Ready](https://badge.waffle.io/1602/jugglingdb.png?label=ready)](https://waffle.io/1602/jugglingdb)  [![Coverage Status](https://coveralls.io/repos/pocesar/promised-jugglingdb/badge.png?branch=master)](https://coveralls.io/r/pocesar/promised-jugglingdb?branch=master) [![Build Status](https://travis-ci.org/pocesar/promised-jugglingdb.png?branch=master)](https://travis-ci.org/pocesar/promised-jugglingdb)
+[![Stories in Ready](https://badge.waffle.io/1602/jugglingdb.png?label=ready)](https://waffle.io/1602/jugglingdb)  [![Coverage Status](https://coveralls.io/repos/pocesar/promised-jugglingdb/badge.png?branch=master)](https://coveralls.io/r/pocesar/promised-jugglingdb?branch=master) [![Build Status](https://travis-ci.org/pocesar/promised-jugglingdb.svg?branch=master)](https://travis-ci.org/pocesar/promised-jugglingdb)
 
 ## Reasoning behind creating a promise based version
 
@@ -39,7 +39,7 @@ npm install promised-jugglingdb
 plus you should install appropriated adapter, for example for redis:
 
 ```bash
-npm install jugglingdb-redis
+    npm install jugglingdb-redis
 ```
 
 check following list of available adapters
@@ -204,7 +204,7 @@ the to callback hell, that's deeply nested and might lead to memory leaks.
       <td><a href="http://www.mongodb.org" target="_blank"><img src="https://raw.github.com/pocesar/promised-jugglingdb/master/media/mongodb.ico" alt="MongoDB" /></a> MongoDB</td>
       <td><a href="https://github.com/jugglingdb/mongodb-adapter" target="_blank">jugglingdb/mongodb-adapter</a></td>
       <td><a href="https://github.com/anatoliychakkaev" target="_blank">Anatoliy Chakkaev</a></td>
-      <td><a href="https://travis-ci.org/jugglingdb/mongodb-adapter" target="_blank"><img src="https://travis-ci.org/jugglingdb/mongodb-adapter.png?branch=master" alt="Build Status" /></a></td>
+      <td><a href="https://travis-ci.org/jugglingdb/mongodb-adapter" target="_blank"><img src="https://travis-ci.org/jugglingdb/mongodb-adapter.svg?branch=master" alt="Build Status" /></a></td>
     </tr>
 
     <!-- MySQL -->
@@ -212,7 +212,7 @@ the to callback hell, that's deeply nested and might lead to memory leaks.
       <td><a href="http://www.mysql.com/" target="_blank"><img src="https://raw.github.com/pocesar/promised-jugglingdb/master/media/mysql.ico" style="vertical-align:middle"" alt="MySQL" /></a> MySQL</td>
       <td><a href="https://github.com/jugglingdb/mysql-adapter" target="_blank">jugglingdb/mysql</a></td>
       <td><a href="https://github.com/dgsan" target="_blank">dgsan</a></td>
-      <td><a href="https://travis-ci.org/jugglingdb/mysql-adapter" target="_blank"><img src="https://travis-ci.org/jugglingdb/mysql-adapter.png?branch=master" alt="Build Status" /></a></td>
+      <td><a href="https://travis-ci.org/jugglingdb/mysql-adapter" target="_blank"><img src="https://travis-ci.org/jugglingdb/mysql-adapter.svg?branch=master" alt="Build Status" /></a></td>
     </tr>
 
     <!-- CouchDB / nano -->
@@ -220,7 +220,7 @@ the to callback hell, that's deeply nested and might lead to memory leaks.
       <td><a href="http://couchdb.apache.org/" target="_blank"><img width="16" src="https://raw.github.com/pocesar/promised-jugglingdb/master/media/couchdb.ico" style="vertical-align:middle"" alt="CouchDB" /></a> CouchDB / nano</td>
       <td><a href="https://github.com/jugglingdb/nano-adapter" target="_blank">jugglingdb/nano-adapter</a></td>
       <td><a href="https://github.com/nrw" target="_blank">Nicholas Westlake</a></td>
-      <td><a href="https://travis-ci.org/jugglingdb/nano-adapter" target="_blank"><img src="https://travis-ci.org/jugglingdb/nano-adapter.png?branch=master" alt="Build Status" /></a></td>
+      <td><a href="https://travis-ci.org/jugglingdb/nano-adapter" target="_blank"><img src="https://travis-ci.org/jugglingdb/nano-adapter.svg?branch=master" alt="Build Status" /></a></td>
     </tr>
 
     <!-- PostgreSQL -->
@@ -228,7 +228,7 @@ the to callback hell, that's deeply nested and might lead to memory leaks.
       <td><a href="http://www.postgresql.org/" target="_blank"><img src="http://www.postgresql.org/favicon.ico" style="vertical-align:middle"" alt="PostgreSQL" /></a> PostgreSQL</td>
       <td><a href="https://github.com/jugglingdb/postgres-adapter" target="_blank">jugglingdb/postgres-adapter</a></td>
       <td><a href="https://github.com/anatoliychakkaev" target="_blank">Anatoliy Chakkaev</a></td>
-      <td><a href="https://travis-ci.org/jugglingdb/postgres-adapter" target="_blank"><img src="https://travis-ci.org/jugglingdb/postgres-adapter.png?branch=master" alt="Build Status" /></a></td>
+      <td><a href="https://travis-ci.org/jugglingdb/postgres-adapter" target="_blank"><img src="https://travis-ci.org/jugglingdb/postgres-adapter.svg?branch=master" alt="Build Status" /></a></td>
     </tr>
 
     <!-- Redis -->
@@ -236,7 +236,7 @@ the to callback hell, that's deeply nested and might lead to memory leaks.
       <td><a href="http://redis.io/" target="_blank"><img src="http://redis.io/images/favicon.png" alt="Redis" /></a> Redis</td>
       <td><a href="https://github.com/jugglingdb/redis-adapter" target="_blank">jugglingdb-redis</a></td>
       <td><a href="https://github.com/anatoliychakkaev" target="_blank">Anatoliy Chakkaev</a></td>
-      <td><a href="https://travis-ci.org/jugglingdb/redis-adapter" target="_blank"><img src="https://travis-ci.org/jugglingdb/redis-adapter.png?branch=master" alt="Build Status" /></a></td>
+      <td><a href="https://travis-ci.org/jugglingdb/redis-adapter" target="_blank"><img src="https://travis-ci.org/jugglingdb/redis-adapter.svg?branch=master" alt="Build Status" /></a></td>
     </tr>
 
     <!-- RethinkDB -->
@@ -244,7 +244,7 @@ the to callback hell, that's deeply nested and might lead to memory leaks.
       <td><a href="http://www.rethinkdb.com/" target="_blank"><img src="https://raw.github.com/pocesar/promised-jugglingdb/master/media/rethinkdb.ico" alt="RethinkDB" width="16" height="16" /></a> RethinkDB</td>
       <td><a href="https://github.com/fuwaneko/jugglingdb-rethink" target="_blank">jugglingdb-rethink</a></td>
       <td><a href="https://github.com/fuwaneko" target="_blank">Dmitry Gorbunov</a></td>
-      <td><a href="https://travis-ci.org/fuwaneko/jugglingdb-rethink" target="_blank"><img src="https://travis-ci.org/fuwaneko/jugglingdb-rethink.png?branch=master" alt="Build Status" /></a></td>
+      <td><a href="https://travis-ci.org/fuwaneko/jugglingdb-rethink" target="_blank"><img src="https://travis-ci.org/fuwaneko/jugglingdb-rethink.svg?branch=master" alt="Build Status" /></a></td>
     </tr>
 
     <!-- SQLite -->
@@ -252,14 +252,14 @@ the to callback hell, that's deeply nested and might lead to memory leaks.
       <td><a href="http://www.sqlite.org/" target="_blank"><img width="16" src="https://raw.github.com/1602/jugglingdb/master/media/sqlite.png" style="vertical-align:middle" alt="SQLite" /></a> SQLite</td>
       <td><a href="https://github.com/jugglingdb/sqlite3-adapter" target="_blank">jugglingdb/sqlite3-adapter</a></td>
       <td><a href="https://github.com/anatoliychakkaev" target="_blank">Anatoliy Chakkaev</a></td>
-      <td><a href="https://travis-ci.org/jugglingdb/sqlite3-adapter" target="_blank"><img src="https://travis-ci.org/jugglingdb/sqlite3-adapter.png?branch=master" alt="Build Status" /></a></td>
+      <td><a href="https://travis-ci.org/jugglingdb/sqlite3-adapter" target="_blank"><img src="https://travis-ci.org/jugglingdb/sqlite3-adapter.svg?branch=master" alt="Build Status" /></a></td>
     </tr>
     <!-- ArangoDB -->
     <tr>
       <td><a href="http://www.arangodb.org/"><img src="https://raw.github.com/pocesar/promised-jugglingdb/master/media/arangodb.ico" style="vertical-align:middle" alt="ArangoDB" /></a> ArangoDB</td>
       <td><a href="https://github.com/m0ppers/jugglingdb-arango">jugglingdb-arango</a></td>
       <td><a href="https://github.com/m0ppers">Andreas Streichardt</a></td>
-      <td><a href="https://travis-ci.org/m0ppers/jugglingdb-arango"><img src="https://travis-ci.org/m0ppers/jugglingdb-arango.png?branch=master" alt="Build Status" /></a></td>
+      <td><a href="https://travis-ci.org/m0ppers/jugglingdb-arango"><img src="https://travis-ci.org/m0ppers/jugglingdb-arango.svg?branch=master" alt="Build Status" /></a></td>
     </tr>
     <tr>
       <td>WebService</td>
@@ -429,7 +429,7 @@ user.isValid().then(function () {
 }, function(u){
     // not valid
     // u is ValidationError
-    user.errors // hash of errors {attr: [errmessage, errmessage, ...], attr: ...}
+        user.errors // hash of errors {attr: [errmessage, errmessage, ...], attr: ...}    
     // or u.codes
     // or u.obj.errors === user.errors they are the same
 });
@@ -509,7 +509,7 @@ examples: `./test/hooks.test.js`
 To use custom adapter, pass it's package name as first argument to `Schema` constructor:
 
 ```javascript
-var mySchema = new Schema('mycouch', {host:.., port:...});
+    var mySchema = new Schema('mycouch', {host:.., port:...});
 ```
 
 In that case your adapter should be named as 'jugglingdb-mycouch' npm package.
@@ -523,7 +523,7 @@ this bucket (example from `jugglingdb-redis`):
 
 ```javascript
 // test/init.js
-var jdb = require('jugglingdb'),
+    var jdb = require('jugglingdb'),
 Schema = jdb.Schema;
 
 global.getSchema = function(){
@@ -547,7 +547,7 @@ describe('myadapter', function(){
 
     // the include.test.js contain relation tests that your adapter should pass
     require('jugglingdb/test/include.test.js');
-});
+    });
 ```
 
 If you are using mocha, to run tests use this command (will search for files in the `test` directory by default):
