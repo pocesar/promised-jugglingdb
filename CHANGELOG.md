@@ -1,3 +1,9 @@
+# June 24th 2014
+* Refactoring all the code
+* Removing deprecated promise API
+* Rebase to Juggling-DB upstream
+* Remove side effect requires
+
 # March 15th 2014
 * Merge README.md changes from jugglingdb
 * Hopefully fix schema.adapter.logger that broke in `jugglingdb-redis`

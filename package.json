@@ -63,7 +63,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "test": "jshint lib && mocha",
+    "test": "jshint lib test && mocha",
     "prepublish": "make build"
   },
   "man": [

@@ -6,21 +6,26 @@
   "noarg"   : true,
   "noempty" : false,
   "newcap"  : false,
-  "nonew"   : true,
+  "nonew"   : false,
   "undef"   : true,
   "devel"   : true,
   "proto"   : true,
   "node"    : true,
   "sub"     : true,
+  "latedef" : true,
   "globals" : {
     "$"         : true,
     "railway"   : true,
     "it"        : true,
     "describe"  : true,
+    "getSchema" : true,
     "expect"    : true,
-    "after"     : true,
+    "sinon"     : true,
+    "before"    : true,
     "beforeEach": true,
-    "before"    : true
+    "after"     : true,
+    "afterEach" : true,
+    "JDB"       : true
   },
   "quotmark": "single"
 }

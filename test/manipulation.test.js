@@ -116,7 +116,8 @@ describe('manipulation', function (){
   describe('save', function (){
 
     it('should save new object', function (done){
-      var p = new Person;
+      var p = new Person();
+
       p.save().then(function (){
         expect(p.id).to.be.ok();
       }).done(done);

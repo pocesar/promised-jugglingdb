@@ -1,6 +1,7 @@
-// This test written in mocha+should.js
-var j = require('../'), db, User;
-var ValidationError = require('../lib/validations.js').ValidationError;
+var
+  db,
+  User,
+  ValidationError = JDB.Validations.ValidationError;
 
 function getValidAttributes(){
   return {
@@ -88,7 +89,6 @@ describe('validations', function (){
       User.create().done(function (){
       }, function (err){
         expect(err).to.be.ok(err);
-        console.log(err);
         //should.exist(model);
         done();
       });

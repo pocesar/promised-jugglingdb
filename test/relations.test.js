@@ -29,7 +29,7 @@ describe('relations', function (){
       Book.hasMany(Chapter);
       Book.hasMany(Reader, {as: 'users'});
       Book.hasMany(Author, {foreignKey: 'projectId'});
-      var b = new Book;
+      var b = new Book();
       expect(b.chapters).to.be.a('function');
       expect(b.users).to.be.a('function');
       expect(b.authors).to.be.a('function');

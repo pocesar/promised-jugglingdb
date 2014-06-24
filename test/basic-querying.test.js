@@ -1,5 +1,38 @@
 var db, User;
 
+function seed(done){
+  var count = 0;
+  var beatles = [
+    {
+      name : 'John Lennon',
+      mail : 'john@b3atl3s.co.uk',
+      role : 'lead',
+      order: 2
+    },
+    {
+      name : 'Paul McCartney',
+      mail : 'paul@b3atl3s.co.uk',
+      role : 'lead',
+      order: 1
+    },
+    {name: 'George Harrison', order: 5},
+    {name: 'Ringo Starr', order: 6},
+    {name: 'Pete Best', order: 4},
+    {name: 'Stuart Sutcliffe', order: 3}
+  ];
+  User.destroyAll().done(function (){
+    beatles.forEach(function (beatle){
+      User.create(beatle).done(ok);
+    });
+  });
+
+  function ok(){
+    if (++count === beatles.length) {
+      done();
+    }
+  }
+}
+
 describe('basic-querying', function (){
 
   before(function (done){
@@ -250,36 +283,3 @@ describe('basic-querying', function (){
   });
 
 });
-
-function seed(done){
-  var count = 0;
-  var beatles = [
-    {
-      name : 'John Lennon',
-      mail : 'john@b3atl3s.co.uk',
-      role : 'lead',
-      order: 2
-    },
-    {
-      name : 'Paul McCartney',
-      mail : 'paul@b3atl3s.co.uk',
-      role : 'lead',
-      order: 1
-    },
-    {name: 'George Harrison', order: 5},
-    {name: 'Ringo Starr', order: 6},
-    {name: 'Pete Best', order: 4},
-    {name: 'Stuart Sutcliffe', order: 3}
-  ];
-  User.destroyAll().done(function (){
-    beatles.forEach(function (beatle){
-      User.create(beatle).done(ok);
-    });
-  });
-
-  function ok(){
-    if (++count === beatles.length) {
-      done();
-    }
-  }
-}

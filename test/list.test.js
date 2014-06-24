@@ -1,6 +1,6 @@
 var db, Page;
 
-var List = require('../lib/list');
+var List = JDB.List;
 
 describe('list', function (){
 
@@ -80,9 +80,9 @@ describe('list', function (){
 
   });
 
-  describe("#save", function () {
+  describe('#save', function () {
 
-      it("should save itself to it's parent's parent", function () {
+      it('should save itself to it\'s parent\'s parent', function () {
           var p = new Page({widgets: [{foo: 'bar'}, {foo: 'baz'}]});
           p.widgets.find('bar', 'foo').save();
       });
@@ -104,11 +104,11 @@ describe('list', function (){
     });
 
     it('should accept JSON string data', function(){
-      expect((new List("[1,2,3]")).length).to.equal(3);
+      expect((new List('[1,2,3]')).length).to.equal(3);
     });
 
     it('should create list on invalid JSON string data', function(){
-      expect((new List("[1,2,3")).length).to.equal(0);
+      expect((new List('[1,2,3')).length).to.equal(0);
     });
 
     it('should return the array on inspect', function(){
@@ -116,7 +116,7 @@ describe('list', function (){
     });
 
     it('should return JSON string on typecast', function(){
-      expect("" + list).to.equal('[{"id":1},{"id":2},{"id":3}]');
+      expect('' + list).to.equal('[{"id":1},{"id":2},{"id":3}]');
     });
 
     it('should removeAt', function(){

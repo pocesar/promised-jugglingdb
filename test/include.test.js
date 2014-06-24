@@ -1,7 +1,176 @@
 var db, User, Post, Passport, City, Street, Building, Asset;
-var nbSchemaRequests = 0;
 
 var createdUsers = [];
+
+function clearAndCreate(model, data, callback){
+  var createdItems = [];
+
+  model.destroyAll().done(function (){
+    nextItem(null, null);
+  });
+
+  var itemIndex = 0;
+
+  function nextItem(err, lastItem){
+    if (lastItem !== null) {
+      createdItems.push(lastItem);
+    }
+    if (itemIndex >= data.length) {
+      callback(createdItems);
+      return;
+    }
+
+    model.create(data[itemIndex]).done(function (item){
+      nextItem(null, item);
+    }, nextItem);
+
+    itemIndex++;
+  }
+}
+
+function clearAndCreateScoped(modelName, data, scope, callback){
+  var createdItems = [];
+
+  var clearedItemIndex = 0;
+
+  if (scope && scope.length) {
+    scope.forEach(function (instance){
+      instance[modelName].destroyAll().then(function (){
+        clearedItemIndex++;
+        if (clearedItemIndex >= scope.length) {
+          createItems();
+        }
+      });
+    });
+  } else {
+    callback(createdItems);
+  }
+
+  var itemIndex = 0;
+
+  function nextItem(err, lastItem){
+    itemIndex++;
+
+    if (lastItem !== null) {
+      createdItems.push(lastItem);
+    }
+    if (itemIndex >= data.length) {
+      callback(createdItems);
+      return;
+    }
+  }
+
+  function createItems(){
+    scope.forEach(function (instance, instanceIndex){
+      instance[modelName].create(data[instanceIndex]).finally(nextItem);
+    });
+  }
+}
+
+function setup(done){
+  db = getSchema();
+  City = db.define('City');
+  Street = db.define('Street');
+  Building = db.define('Building');
+  User = db.define('User', {
+    name: String,
+    age : Number
+  });
+  Passport = db.define('Passport', {
+    number: String
+  });
+  Post = db.define('Post', {
+    title: String
+  });
+  Asset = db.define('Asset', {
+    url: String
+  });
+
+  Passport.belongsTo('owner', {model: User});
+  User.hasMany('passports', {foreignKey: 'ownerId'});
+  User.hasMany('posts', {foreignKey: 'userId'});
+  Post.belongsTo('author', {model: User, foreignKey: 'userId'});
+  User.hasAndBelongsToMany('assets');
+
+  db.automigrate().done(function (){
+    var createdPassports = [];
+    var createdPosts = [];
+    var createdAssets = [];
+
+    function createUsers(){
+      clearAndCreate(
+        User,
+        [
+          {name: 'User A', age: 21},
+          {name: 'User B', age: 22},
+          {name: 'User C', age: 23},
+          {name: 'User D', age: 24},
+          {name: 'User E', age: 25}
+        ],
+        function (items){
+          createdUsers = items;
+          createPassports();
+        }
+      );
+    }
+
+    function createPassports(){
+      clearAndCreate(
+        Passport,
+        [
+          {number: '1', ownerId: createdUsers[0].id},
+          {number: '2', ownerId: createdUsers[1].id},
+          {number: '3'}
+        ],
+        function (items){
+          createdPassports = items;
+          createPosts();
+        }
+      );
+    }
+
+    function createPosts(){
+      clearAndCreate(
+        Post,
+        [
+          {title: 'Post A', userId: createdUsers[0].id},
+          {title: 'Post B', userId: createdUsers[0].id},
+          {title: 'Post C', userId: createdUsers[0].id},
+          {title: 'Post D', userId: createdUsers[1].id},
+          {title: 'Post E'}
+        ],
+        function (items){
+          createdPosts = items;
+          createAssets();
+        }
+      );
+    }
+
+    function createAssets(){
+      clearAndCreateScoped(
+        'assets',
+        [
+          {url: 'http://placekitten.com/200/200'},
+          {url: 'http://placekitten.com/300/300'},
+          {url: 'http://placekitten.com/400/400'},
+          {url: 'http://placekitten.com/500/500'}
+        ],
+        [
+          createdUsers[0],
+          createdUsers[0],
+          createdUsers[0],
+          createdUsers[1]
+        ],
+        function (items){
+          createdAssets = items;
+          done();
+        }
+      );
+    }
+
+    createUsers();
+  });
+}
 
 describe('include', function (){
 
@@ -155,171 +324,3 @@ describe('include', function (){
   });
 });
 
-function setup(done){
-  db = getSchema();
-  City = db.define('City');
-  Street = db.define('Street');
-  Building = db.define('Building');
-  User = db.define('User', {
-    name: String,
-    age : Number
-  });
-  Passport = db.define('Passport', {
-    number: String
-  });
-  Post = db.define('Post', {
-    title: String
-  });
-  Asset = db.define('Asset', {
-    url: String
-  });
-
-  Passport.belongsTo('owner', {model: User});
-  User.hasMany('passports', {foreignKey: 'ownerId'});
-  User.hasMany('posts', {foreignKey: 'userId'});
-  Post.belongsTo('author', {model: User, foreignKey: 'userId'});
-  User.hasAndBelongsToMany('assets');
-
-  db.automigrate().done(function (){
-    var createdPassports = [];
-    var createdPosts = [];
-    var createdAssets = [];
-    createUsers();
-
-    function createUsers(){
-      clearAndCreate(
-        User,
-        [
-          {name: 'User A', age: 21},
-          {name: 'User B', age: 22},
-          {name: 'User C', age: 23},
-          {name: 'User D', age: 24},
-          {name: 'User E', age: 25}
-        ],
-        function (items){
-          createdUsers = items;
-          createPassports();
-        }
-      );
-    }
-
-    function createPassports(){
-      clearAndCreate(
-        Passport,
-        [
-          {number: '1', ownerId: createdUsers[0].id},
-          {number: '2', ownerId: createdUsers[1].id},
-          {number: '3'}
-        ],
-        function (items){
-          createdPassports = items;
-          createPosts();
-        }
-      );
-    }
-
-    function createPosts(){
-      clearAndCreate(
-        Post,
-        [
-          {title: 'Post A', userId: createdUsers[0].id},
-          {title: 'Post B', userId: createdUsers[0].id},
-          {title: 'Post C', userId: createdUsers[0].id},
-          {title: 'Post D', userId: createdUsers[1].id},
-          {title: 'Post E'}
-        ],
-        function (items){
-          createdPosts = items;
-          createAssets();
-        }
-      );
-    }
-
-    function createAssets(){
-      clearAndCreateScoped(
-        'assets',
-        [
-          {url: 'http://placekitten.com/200/200'},
-          {url: 'http://placekitten.com/300/300'},
-          {url: 'http://placekitten.com/400/400'},
-          {url: 'http://placekitten.com/500/500'}
-        ],
-        [
-          createdUsers[0],
-          createdUsers[0],
-          createdUsers[0],
-          createdUsers[1]
-        ],
-        function (items){
-          createdAssets = items;
-          done();
-        }
-      );
-    }
-  });
-}
-
-function clearAndCreate(model, data, callback){
-  var createdItems = [];
-
-  model.destroyAll().done(function (){
-    nextItem(null, null);
-  });
-
-  var itemIndex = 0;
-
-  function nextItem(err, lastItem){
-    if (lastItem !== null) {
-      createdItems.push(lastItem);
-    }
-    if (itemIndex >= data.length) {
-      callback(createdItems);
-      return;
-    }
-
-    model.create(data[itemIndex]).done(function (item){
-      nextItem(null, item);
-    }, nextItem);
-
-    itemIndex++;
-  }
-}
-
-function clearAndCreateScoped(modelName, data, scope, callback){
-  var createdItems = [];
-
-  var clearedItemIndex = 0;
-
-  if (scope && scope.length) {
-    scope.forEach(function (instance){
-      instance[modelName].destroyAll().then(function (){
-        clearedItemIndex++;
-        if (clearedItemIndex >= scope.length) {
-          createItems();
-        }
-      });
-    });
-  } else {
-    callback(createdItems);
-  }
-
-  var itemIndex = 0;
-
-  function nextItem(err, lastItem){
-    itemIndex++;
-
-    if (lastItem !== null) {
-      createdItems.push(lastItem);
-    }
-    if (itemIndex >= data.length) {
-      callback(createdItems);
-      return;
-    }
-  }
-
-  function createItems(){
-    scope.forEach(function (instance, instanceIndex){
-      instance[modelName].create(data[instanceIndex]).finally(nextItem);
-    });
-  }
-}

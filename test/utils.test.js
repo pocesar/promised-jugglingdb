@@ -1,4 +1,4 @@
-var utils = require('../lib/utils');
+var utils = JDB.utils;
 
 describe('utils', function (){
   describe('curry', function (){
@@ -77,9 +77,9 @@ describe('utils', function (){
     });
   });
 
-  describe('defer', function (){
-    it('should return a deferred', function (done){
-      var deferred = utils.defer();
+  describe('promises', function (){
+    it('should return library', function (done){
+      var deferred = utils.Promise.defer();
 
       deferred.promise.done(function(value){
         expect(value).to.equal(true);

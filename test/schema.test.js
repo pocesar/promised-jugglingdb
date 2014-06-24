@@ -9,7 +9,7 @@ describe('schema', function (){
 
   it('should define Model', function (){
     expect(Model.schema).to.eql(db);
-    var m = new Model;
+    var m = new Model();
     expect(m.schema).to.eql(db);
   });
 
@@ -17,7 +17,7 @@ describe('schema', function (){
     SlaveModel = slave.copyModel(Model);
     expect(SlaveModel.schema).to.eql(slave);
     expect(slave).to.not.eql(db);
-    var sm = new SlaveModel;
+    var sm = new SlaveModel();
     expect(sm).to.be.a(Model);
     expect(sm.schema).to.not.eql(db);
     expect(sm.schema).to.eql(slave);

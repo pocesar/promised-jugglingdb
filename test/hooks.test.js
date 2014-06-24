@@ -1,9 +1,28 @@
-var j = require('../'),
-  Schema = j.Schema,
-  AbstractClass = j.AbstractClass,
-  Hookable = j.Hookable,
-
+var
+  Schema = JDB.Schema,
   db, User;
+
+
+function addHooks(name, done){
+  var called = false, random = String(Math.floor(Math.random() * 1000));
+  User['before' + name] = function (next, data){
+    called = true;
+    data.email = random;
+    next();
+  };
+  User['after' + name] = function (next){
+    expect(called).to.be(true);
+    expect(this.email).to.equal(random);
+    done();
+  };
+}
+
+function removeHooks(name){
+  return function (){
+    User['after' + name] = null;
+    User['before' + name] = null;
+  };
+}
 
 describe('hooks', function (){
 
@@ -439,24 +458,3 @@ describe('hooks', function (){
 
   });
 });
-
-function addHooks(name, done){
-  var called = false, random = String(Math.floor(Math.random() * 1000));
-  User['before' + name] = function (next, data){
-    called = true;
-    data.email = random;
-    next();
-  };
-  User['after' + name] = function (next){
-    expect(called).to.be(true);
-    expect(this.email).to.equal(random);
-    done();
-  };
-}
-
-function removeHooks(name){
-  return function (){
-    User['after' + name] = null;
-    User['before' + name] = null;
-  };
-}

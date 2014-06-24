@@ -3,8 +3,10 @@
 var fs = require('fs');
 var path = require('path');
 
-var Schema = exports.Schema = require('./lib/schema').Schema;
-exports.AbstractClass = require('./lib/model.js');
+exports.JugglingDb = require('./lib');
+
+var Schema = exports.Schema = exports.JugglingDb.Schema;
+exports.AbstractClass = exports.JugglingDb.AbstractClass;
 
 var baseSQL = './lib/sql';
 
