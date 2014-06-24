@@ -261,6 +261,7 @@ function setup(done){
 
 function clearAndCreate(model, data, callback){
   var createdItems = [];
+
   model.destroyAll().done(function (){
     nextItem(null, null);
   });
@@ -288,8 +289,8 @@ function clearAndCreateScoped(modelName, data, scope, callback){
   var createdItems = [];
 
   var clearedItemIndex = 0;
-  if (scope && scope.length) {
 
+  if (scope && scope.length) {
     scope.forEach(function (instance){
       instance[modelName].destroyAll().then(function (){
         clearedItemIndex++;
@@ -298,9 +299,7 @@ function clearAndCreateScoped(modelName, data, scope, callback){
         }
       });
     });
-
   } else {
-
     callback(createdItems);
   }
 
@@ -320,7 +319,7 @@ function clearAndCreateScoped(modelName, data, scope, callback){
 
   function createItems(){
     scope.forEach(function (instance, instanceIndex){
-      instance[modelName].create(data[instanceIndex], nextItem);
+      instance[modelName].create(data[instanceIndex]).finally(nextItem);
     });
   }
 }

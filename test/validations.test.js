@@ -54,29 +54,30 @@ describe('validations', function (){
 
       User.validatesPresenceOf('name');
       User.beforeValidate = function (next, data){
-        should.exist(data)
+        expect(data).to.be.ok();
         next(new Error('Fail'));
       };
 
-      var user = new User;
-      user.isValid(function (valid){
+      var user = new User();
+      user.isValid({name: 'test'}).done(function (valid){
         // when validate hook fails, valid should be false
-        valid.should.equal(false)
-        done()
-      }, {name: 'test'})
+        expect(valid).to.be(false);
+        done();
+      });
     });
 
     it('should trigger beforeValidate with data (no validations set)', function (done){
       User.beforeValidate = function (next, data){
-        should.exist(data)
-        data.name.should.equal('test')
+        expect(data).to.be.ok();
+        expect(data.name).to.be('test');
         next();
       };
-      var user = new User;
-      user.isValid(function (valid){
-        valid.should.equal(true)
-        done()
-      }, {name: 'test'})
+
+      var user = new User();
+      user.isValid({name: 'test'}).done(function (valid){
+        expect(valid).to.be(true);
+        done();
+      });
     });
 
     it('should allow flow break by pass error to callback', function (done){
@@ -84,14 +85,16 @@ describe('validations', function (){
       User.beforeValidate = function (next){
         next(new Error('failed'));
       };
-      User.create(function (err, model){
-        should.exist(err);
-        should.exist(model);
-        done()
-      })
-    })
+      User.create().done(function (){
+      }, function (err){
+        expect(err).to.be.ok(err);
+        console.log(err);
+        //should.exist(model);
+        done();
+      });
+    });
 
-  })
+  });
 
   describe('commons', function (){
 

@@ -14,7 +14,13 @@
   "sub"     : true,
   "globals" : {
     "$"         : true,
-    "railway"   : true
+    "railway"   : true,
+    "it"        : true,
+    "describe"  : true,
+    "expect"    : true,
+    "after"     : true,
+    "beforeEach": true,
+    "before"    : true
   },
   "quotmark": "single"
 }
